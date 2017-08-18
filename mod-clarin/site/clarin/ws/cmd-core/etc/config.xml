@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<nvp>
+    <registry>http://catalog.clarin.eu/ds/ComponentRegistry</registry>
+    <profile>clarin.eu:cr1:p_1311927752335</profile>
+    <space>public</space>
+    <group>CLARIN core WS descr - version 1.0.1</group>
+    <site>http://localhost:8080/</site>
+</nvp>

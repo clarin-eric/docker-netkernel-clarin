@@ -1,0 +1,42 @@
+<accessor debug="false">
+	<name>/clarin/ws/cmd-core/index.html</name>
+	<descr>The index page for the CLARIN Web Services core CMD model for Web Service descriptions.</descr>
+	<idoc>
+		<instr>
+			<type>xinclude</type>
+			<operand>index.html</operand>
+			<target>var:index</target>
+		</instr>
+		<instr>
+			<type>sloot.xquery</type>
+			<operator>
+				<nvp>
+					{doc('etc/config.xml')/nvp/*}
+				</nvp>
+			</operator>
+			<target>var:config</target>
+		</instr>
+		<accessor-debug>
+			<instr>
+				<type>log</type>
+				<operand>var:config</operand>
+			</instr>
+		</accessor-debug>
+		<instr>
+			<type>sloot.render</type>
+			<template>var:index</template>
+			<attributes>var:config</attributes>
+			<target>this:response</target>
+		</instr>
+	</idoc>
+	<exception>
+		<debug/>
+		<trace>ffcpl:/trace/clarin-ws-cmd-core.index.exception.xml</trace>
+		<throw/>
+	</exception>
+	<response>
+		<debug>ffcpl:/trace/clarin-ws-cmd-core.index.response.xml</debug>
+		<mime>text/html</mime>
+	</response>
+</accessor>
+

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<accessor debug="false">
+    <name>/clarin/ws/cmd-core/profile.xml</name>
+    <descr>Turn the CMD profile in some nice HTML+jQuery.</descr>
+    <idoc>
+        <instr>
+            <type>sloot.xquery</type>
+            <operator>
+                <uri>{string(doc('etc/config.xml')/nvp/registry)}/rest/registry/profiles/{string(doc('etc/config.xml')/nvp/profile)}/xml</uri>
+            </operator>
+            <target>var:prof</target>
+        </instr>
+        <!-- -X->
+        <instr>
+            <type>copy</type>
+            <operand>
+                <uri>file:///D:/user/menwin/projects/CLARIN/WS/documents/CLARINWebService.xml</uri>
+            </operand>
+            <target>var:prof</target>
+        </instr>
+        <!-X- -->
+        <accessor-debug>
+            <instr>
+                <type>log</type>
+                <operand>var:prof</operand>
+            </instr>
+        </accessor-debug>
+        <!-- -->
+        <instr>
+            <type>xslt2</type>
+            <operand>curi:var:prof</operand>
+            <operator>
+                <xsl:stylesheet
+                    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                    version="2.0"
+                >
+                    <xsl:template match="text()"/>
+
+                    <xsl:template match="/">
+                        <table id="core-profile" class="table tree">
+                            <thead>
+                                <tr >
+                                    <th class="first" style="text-align:left;">CMD profile/component/element</th>
+                                    <th>type</th>
+                                    <th>cardinality (min:max)</th>
+                                    <th style="text-align:left;">documentation</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <xsl:apply-templates/>
+                            </tbody>
+                        </table>
+                    </xsl:template>
+                    <xsl:template match="CMD_Component|CMD_Element">
+                        <tr id="node-{generate-id(.)}" >
+                            <xsl:if test="empty(parent::CMD_ComponentSpec)">
+                                <xsl:attribute name="class">
+                                    <xsl:text>child-of-node-</xsl:text>
+                                    <xsl:value-of select="generate-id(..)"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <td class="first">
+                                <xsl:choose>
+                                    <xsl:when test="normalize-space(@ConceptLink)!=''">
+                                        <a href="{@ConceptLink}" target="other">
+                                            <xsl:value-of select="@name"/>
+                                        </a>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:value-of select="@name"/>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </td>
+                            <td style="text-align:center;">
+                                <xsl:choose>
+                                    <xsl:when test="exists(@ValueScheme)">
+                                        <xsl:value-of select="@ValueScheme"/>
+                                    </xsl:when>
+                                    <xsl:when test="parent::CMD_ComponentSpec[@isProfile='true']">
+                                        <a href="$registry$?item=$profile$&amp;space=$space$" target="other">
+                                            <xsl:value-of select="@name"/>
+                                            <xsl:text> ($group$)</xsl:text>
+                                        </a>
+                                    </xsl:when>
+                                    <xsl:when test="exists(@ComponentId)">
+                                        <a href="$registry$?item={@ComponentId}&amp;space=$space$" target="other">
+                                            <xsl:value-of select="@name"/>
+                                            <xsl:text> ($group$)</xsl:text>
+                                        </a>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:text>component</xsl:text>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </td>
+                            <td style="text-align:center;">
+                                <xsl:value-of select="@CardinalityMin"/>
+                                <xsl:text>:</xsl:text>
+                                <xsl:value-of select="@CardinalityMax"/>
+                            </td>
+                            <td>
+                                <xsl:value-of select="@Documentation"/>
+                            </td>
+                        </tr>
+                        <xsl:apply-templates/>
+                    </xsl:template>
+                </xsl:stylesheet>
+            </operator>
+            <target>this:response</target>
+        </instr>
+        <!-- -->
+        <!-- -X->
+        <instr>
+            <type>copy</type>
+            <operand>
+                <div/>
+            </operand>
+            <target>this:response</target>
+        </instr>
+        <!-X- -->
+    </idoc>
+    <exception>
+        <debug/>
+        <trace>ffcpl:/trace/clarin-ws-cmd-core.profile.exception.xml</trace>
+        <!--<throw/>-->
+        <response>
+            <fieldset style="border: red dotted 1px;padding:1em;">
+                <legend style="font-weight:bold;">The CMD profile couldn't be accesses!</legend>
+                Maybe the CMD ComponentRegistry is down? If this keeps on happening please contact: <a href="mailto:Menzo.Windhouwer@mpi.nl">Menzo Windhouwer</a>.
+            </fieldset>
+        </response>
+    </exception>
+    <response>
+        <debug>ffcpl:/trace/clarin-ws-cmd-core.profile.response.xml</debug>
+        <mime>text/html</mime>
+    </response>
+</accessor>
+

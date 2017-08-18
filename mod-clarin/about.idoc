@@ -1,0 +1,36 @@
+<idoc>
+    <seq>
+        <instr>
+            <type>xslt2</type>
+            <operand>netkernel:module</operand>
+            <operator>
+                <xsl:stylesheet
+                  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                  version="2.0"
+                >
+                    <xsl:variable name="mod" select="'urn:isocat:site'"/>
+                    <xsl:template match="text()"/>
+                    <xsl:template match="module[identity/uri=$mod]">
+                        <module uri="{identity/uri}" version="{identity/version}">
+                            <name>
+                                <xsl:value-of select="info/name"/>
+                            </name>
+                            <description>
+                                <xsl:value-of select="info/description"/>
+                            </description>                                        
+                            <imports>
+                                <xsl:copy-of select="document('active:sloot.about')"/>
+                            </imports>
+                        </module>
+                    </xsl:template>
+                </xsl:stylesheet>
+            </operator>
+            <target>ffcpl:/debug/about.xml</target>
+        </instr>
+        <instr>
+            <type>copy</type>
+            <operand>ffcpl:/debug/about.xml</operand>
+            <target>this:response</target>
+        </instr>
+    </seq>
+</idoc>

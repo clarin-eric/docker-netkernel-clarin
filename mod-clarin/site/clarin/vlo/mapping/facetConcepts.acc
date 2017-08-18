@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<accessor debug="true">
+    <name>/clarin/vlo/mapping/facetConfig.xml</name>
+    <descr>Return the VLO facet mapping (in HTML).</descr>
+	<param>
+		<name>representation</name>
+		<descr>the profile to check</descr>
+		<type canonical="true">string</type>
+		<source>
+			<param/>
+			<default>
+				<string>html</string>
+			</default>
+		</source>
+	</param>
+	
+    <idoc>
+        <instr>
+            <type>sloot.xquery</type>
+            <operator>
+                <uri>{string(doc('etc/config.xml')/nvp/mapping)}</uri>
+            </operator>
+            <target>var:conf</target>
+        </instr>
+        <accessor-debug>
+            <instr>
+                <type>log</type>
+                <operand>var:conf</operand>
+            </instr>
+        </accessor-debug>
+    	<choose>
+    		<cond>
+    			<instr>
+    				<type>sloot.xpath2eval</type>
+    				<operand>var:representation</operand>
+    				<operator>
+    					<xpath>.='xml'</xpath>
+    				</operator>
+    				<target>this:cond</target>
+    			</instr>
+    		</cond>
+    		<then>
+    			<!--<instr>
+    				<type>copy</type>
+    				<operand>curi:var:conf</operand>
+    				<target>this:response</target>
+    			</instr>-->
+    		    <instr>
+    		        <type>httpGet</type>
+    		        <url>curi:var:conf</url>
+    		        <target>this:response</target>
+    		    </instr>
+    			<instr>
+    				<type>cast</type>
+    				<operand>this:response</operand>
+    				<operator>
+    					<cast>
+    						<mimetype>application/xml</mimetype>
+    					</cast>
+    				</operator>
+    				<target>this:response</target>
+    			</instr>
+    		</then>
+    		<else>
+    		    <instr>
+    		        <type>httpGet</type>
+    		        <url>curi:var:conf</url>
+    		        <target>var:conf</target>
+    		    </instr>
+    		    <instr>
+    				<type>xslt2</type>
+    		        <!--<operand>curi:var:conf</operand>-->
+    		        <operand>var:conf</operand>
+    				<operator>
+    					<xsl:stylesheet
+    						xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    						version="2.0"
+    						>
+    						<xsl:template match="text()"/>
+    						
+    						<xsl:template match="/facetConcepts">
+    							<dl>
+    								<xsl:apply-templates/>
+    							</dl>
+    						</xsl:template>
+    						<xsl:template match="facetConcept">
+    							<dt>
+    								<xsl:text>Facet: </xsl:text>
+    								<xsl:value-of select="@name"/>
+    							</dt>
+    							<dd>
+    								<xsl:if test="@allowMultipleValues='true'">
+    									<p>Multiple values are allowed.</p>
+    								</xsl:if>
+    								<dl>
+    									<xsl:apply-templates/>
+    								</dl>
+    							</dd>
+    						</xsl:template>
+    						<xsl:template match="concept">
+    							<dt>
+    								<xsl:text>CMD Element ConceptLink: </xsl:text>
+    								<a href="{.}">
+    									<xsl:value-of select="."/>
+    								</a>
+    							</dt>
+    						</xsl:template>
+    						<xsl:template match="acceptableContext">
+    							<dt>
+    								<xsl:text>Acceptable context</xsl:text>
+    							</dt>
+    							<dd>
+    								<xsl:if test="empty(@includeEmpty) or (@includeEmpty='true')">
+    									<p>An empty context leads to acception.</p>
+    								</xsl:if>
+    								<xsl:if test="@includeAny='true'">
+    									<p>Any context, which is not rejected, leads to acception.</p>
+    								</xsl:if>
+    								<dl>
+    									<xsl:apply-templates/>
+    								</dl>
+    							</dd>
+    						</xsl:template>
+    						<xsl:template match="acceptableContext/concept">
+    							<dt>
+    								<xsl:text>Accepted CMD Container ConceptLink: </xsl:text>
+    								<a href="{.}">
+    									<xsl:value-of select="."/>
+    								</a>
+    							</dt>
+    						</xsl:template>
+    						<xsl:template match="rejectableContext">
+    							<dt>
+    								<xsl:text>Rejectable context</xsl:text>
+    							</dt>
+    							<dd>
+    								<xsl:if test="empty(@includeAny) or (@includeAny='true')">
+    									<p>Any context leads to rejection.</p>
+    								</xsl:if>
+    								<xsl:if test="@includeEmpty='true'">
+    									<p>Any empty context leads to rejection.</p>
+    								</xsl:if>
+    								<dl>
+    									<xsl:apply-templates/>
+    								</dl>
+    							</dd>
+    						</xsl:template>
+    						<xsl:template match="rejectableContext/concept">
+    							<dt>
+    								<xsl:text>Rejected CMD Container ConceptLink: </xsl:text>
+    								<a href="{.}">
+    									<xsl:value-of select="."/>
+    								</a>
+    							</dt>
+    						</xsl:template>
+    						<xsl:template match="pattern">
+    							<dt>
+    								<xsl:text>Fallback xpath: </xsl:text>
+    								<xsl:value-of select="."/>
+    							</dt>
+    						</xsl:template>
+    						<xsl:template match="blacklistPattern">
+    							<dt>
+    								<xsl:text>Blacklist xpath: </xsl:text>
+    								<xsl:value-of select="."/>
+    							</dt>
+    						</xsl:template>
+    					</xsl:stylesheet>
+    				</operator>
+    				<target>this:response</target>
+    			</instr>
+    			<instr>
+    				<type>cast</type>
+    				<operand>this:response</operand>
+    				<operator>
+    					<cast>
+    						<mimetype>text/html</mimetype>
+    					</cast>
+    				</operator>
+    				<target>this:response</target>
+    			</instr>
+    		</else>
+    	</choose>
+    </idoc>
+    <exception>
+        <debug/>
+    	<trace>ffcpl:/trace/clarin-vlo-mapping.facetConcepts.exception.xml</trace>
+        <!--<throw/>-->
+        <response>
+            <fieldset style="border: red dotted 1px;padding:1em;">
+                <legend style="font-weight:bold;">The facetConcepts.xml couldn't be accessed!</legend>
+                If this keeps on happening please contact: <a href="mailto:Menzo.Windhouwer@meertens.knaw.nl">Menzo Windhouwer</a>.
+            </fieldset>
+        </response>
+    </exception>
+    <response>
+    	<debug>ffcpl:/trace/clarin-vlo-mapping.facetConcepts.response.xml</debug>
+    </response>
+</accessor>
+

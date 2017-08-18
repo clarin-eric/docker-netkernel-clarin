@@ -1,0 +1,110 @@
+body {
+    background-color : white;
+    font-family : Helvetica, Arial, sans-serif;
+}
+
+table.main {
+    width : 100%;
+    border-collapse : collapse;
+    border : 0;
+}
+
+table.main td.left {
+    width : 126px;
+    vertical-align : top;
+    border-right : 1px dotted #02027C;
+    padding : 10px;
+}
+
+table.main td.right {
+    vertical-align : top;
+    padding : 10px;
+}
+
+div.title {
+    font-size : xx-large;
+}
+
+div.subtitle {
+    font-size : large;
+    border-bottom : 1px dotted #02027C;
+}
+
+div.header {
+    font-style : italic;
+}
+
+ol.menu {
+    list-style-type : none;
+    padding : 0;
+}
+
+ol.submenu {
+    list-style-type : none;
+    padding : 10px;
+}
+
+p.go {
+    text-align : center;
+}
+
+div.note {
+    font-size : smaller;
+}
+
+table.info {
+    border : 1px solid white;
+    border-collapse : collapse;
+    margin : 10px;
+}
+
+table.info thead th {
+    border : 1px solid white;
+    padding : 5px;
+}
+
+table.info tbody td {
+    border-right : 1px solid white;
+    padding : 5px;
+}
+
+table.table tbody tr:nth-of-type(even) {
+    background-color : #F0F0F0;
+}
+
+table.table {
+    margin : 1em;
+    border : 1px dotted #02027C;
+    width : 95%;
+    border-collapse : collapse;
+}
+
+table.table thead {
+    border : 1px dotted #02027C;
+}
+
+table.table thead tr {
+    background-color:#F0F0F0;
+}
+
+table.table thead tr th {
+    border:1px dotted #02027C;
+    font-weight:normal;
+    font-style:italic;
+}
+
+table.table tbody tr td {
+    border-left:1px dotted #02027C;
+}
+
+table.tree thead tr th.first {
+    padding-left:19px;
+}
+
+table.tree tbody tr td.first {
+    padding-left:19px;
+}
+
+table.report tbody tr td.error {
+    font-weight: bold;
+}

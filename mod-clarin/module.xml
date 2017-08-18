@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module>
+    <identity>
+        <uri>urn:clarin</uri>
+        <version>0.0.1</version>
+    </identity>
+    <info>
+        <name>CLARIN</name>
+        <description>NK module providing CLARIN services</description>
+        <type>application</type>
+    </info>
+    <publisher>
+        <name>CLARIN ERIC</name>
+        <uri>http://www.clarin.eu/</uri>
+    </publisher>
+    <licence>
+        <name>GNU General Public License version 3</name>
+        <uri>https://opensource.org/licenses/GPL-3.0</uri>
+    </licence>
+    <export>
+        <uri>
+            <match>ffcpl:/entrypoints.xml</match>
+            <match>ffcpl:/mod_clarin/icon.png</match>
+            <match>ffcpl:/mod_clarin/doc/.*</match>
+            <match>active:clarin\..*</match>
+            <match>ffcpl:/clarin/.*</match>
+            <match>ffcpl:/.*</match>
+        </uri>
+        <class/>
+    </export>
+    <rewrite>
+        <!-- access to the clarin module info -->
+        <rule>
+            <match>ffcpl:/mod_clarin/icon.png(\+.*)?</match>
+            <to>ffcpl:/icon.png</to>
+        </rule>
+        <rule>
+            <match>ffcpl:/mod_clarin/doc/(.*)</match>
+            <to>ffcpl:/doc/$1</to>
+        </rule>
+        <rule>
+            <match>ffcpl:/doc/</match>
+            <to>ffcpl:/doc/index.html</to>
+        </rule>
+        <rule>
+            <match>active:clarin.about</match>
+            <to>active:dpml+operand@ffcpl:/about.idoc</to>
+        </rule>
+
+        <!-- handle friends of index.html -->
+        <rule>
+            <match>ffcpl:/index.html((\+.*)?)</match>
+            <to>ffcpl:/index.html</to>
+        </rule>
+        <rule>
+            <match>ffcpl:/index.htm((\+.*)?)</match>
+            <to>ffcpl:/index.html</to>
+        </rule>
+        <rule>
+            <match>ffcpl:/((\+.*)?)</match>
+            <to>ffcpl:/index.html</to>
+        </rule>
+
+        <!-- CLARIN WS CMD core validation handler -->
+        <rule>
+            <match>ffcpl:/clarin/ws/cmd-core/validate(.*)</match>
+            <to>active:sloot.accessor+operand@ffcpl:/site/clarin/ws/cmd-core/validate.acc$1</to>
+        </rule>
+        
+        <!-- CLARIN VLO mapping check handler -->
+        <rule>
+            <match>ffcpl:/clarin/vlo/mapping/check(.*)</match>
+            <to>active:sloot.accessor+operand@ffcpl:/site/clarin/vlo/mapping/check.acc$1</to>
+        </rule>
+    	<rule>
+    		<match>ffcpl:/clarin/vlo/mapping/facetConcepts.xml(.*)</match>
+    		<to>active:sloot.accessor+operand@ffcpl:/site/clarin/vlo/mapping/facetConcepts.acc+representation@data:text/plain,xml</to>
+    	</rule>
+    	
+        <!-- index.html and friends -->
+        <rule>
+            <match>ffcpl:/(?!site|doc)(.*?)/index.html((\+.*)?)</match>
+            <to>ffcpl:/$1/index.html</to>
+        </rule>
+        <rule>
+            <match>ffcpl:/(?!site|doc)(.*?)/index.htm((\+.*)?)</match>
+            <to>ffcpl:/$1/index.html</to>
+        </rule>
+        <rule>
+            <match>ffcpl:/(?!site|doc)(.*?)/index.html</match>
+            <to>active:sloot.accessor+operand@ffcpl:/site/$1/index.acc</to>
+        </rule>
+        <skip>
+            <match>active:.*/index.acc</match>
+            <count>1</count>
+        </skip>
+        <rule>
+            <match>ffcpl:/(?!site|doc)([^.]*?)(/?)((\+.*)?)</match>
+            <to>active:sloot.redirect+url@data:text/plain,/$1/index.html</to>
+        </rule>
+        
+        <!-- all other static files -->
+        <rule>
+            <match>ffcpl:/(?!site|doc)(.*?)/([^+]+)((\+.*)?)</match>
+            <to>ffcpl:/site/$1/$2</to>
+        </rule>
+        
+        <!-- file types -->
+        <rule>
+            <match>ffcpl:/site/([^+]*\.css)(\+.*)?</match>
+            <to>active:sloot.mime+mime@data:text/plain,text/css+file@ffcpl:/site/$1</to>
+        </rule>
+        <rule>
+            <match>ffcpl:/site/([^+]*\.js)(\+.*)?</match>
+            <to>active:sloot.mime+mime@data:text/plain,text/javascript+file@ffcpl:/site/$1</to>
+        </rule>
+        <rule>
+            <match>ffcpl:/site/(.+.pdf)((\+.*)?)</match>
+            <to>active:sloot.mime+mime@data:text/plain,application/pdf+file@ffcpl:/site/$1</to>
+        </rule>
+        <rule>
+            <match>ffcpl:/site/(.+.ppt)((\+.*)?)</match>
+            <to>active:sloot.mime+mime@data:text/plain,application/vnd.ms-powerpoint+file@ffcpl:/site/$1</to>
+        </rule>
+        <rule>
+            <match>ffcpl:/site/(.+.pptx)((\+.*)?)</match>
+            <to>active:sloot.mime+mime@data:text/plain,application/vnd.openxmlformats-officedocument.presentationml.presentation+file@ffcpl:/site/$1</to>
+        </rule>
+        <rule>
+            <match>ffcpl:/site/(.+.mp4)((\+.*)?)</match>
+            <to>active:sloot.mime+mime@data:text/plain,video/mp4+file@ffcpl:/site/$1</to>
+        </rule>
+    </rewrite>
+    <mapping>
+        <!-- core CLARIN CMD profile for WS descr -->
+        <rewrite>
+            <match>ffcpl:/site/clarin/ws/cmd-core/profile.xml</match>
+            <to>active:sloot.accessor+operand@ffcpl:/site/clarin/ws/cmd-core/profile.acc</to>
+        </rewrite>
+        <!-- CLARIN VLO facet mapping -->
+        <rewrite>
+            <match>ffcpl:/site/clarin/vlo/mapping/facetConcepts.html</match>
+            <to>active:sloot.accessor+operand@ffcpl:/site/clarin/vlo/mapping/facetConcepts.acc+representation@data:text/plain,html</to>
+        </rewrite>
+        <!-- open up the file system -->
+        <this>
+            <match>ffcpl:/.*</match>
+        </this>
+        <!-- imports -->
+        <import>
+            <uri>urn:org:ten60:netkernel:ext:layer1</uri>
+        </import>
+        <import>
+            <uri>urn:org:ten60:netkernel:ext:xml:core</uri>
+        </import>
+        <import>
+            <uri>urn:org:ten60:netkernel:ext:xml:ura</uri>
+        </import>
+        <import>
+            <uri>urn:org:ten60:netkernel:ext:sys</uri>
+        </import>
+        <import>
+            <uri>urn:org:ten60:netkernel:ext:dpml</uri>
+        </import>
+        <import>
+            <uri>urn:org:ten60:netkernel:ext:script</uri>
+        </import>
+        <import>
+            <uri>urn:org:ten60:netkernel:ext:kernel</uri>
+        </import>
+        <import>
+            <uri>urn:org:ten60:netkernel:ext:xquery</uri>
+        </import>
+        <import>
+            <uri>urn:org:ten60:netkernel:ext:http:client</uri>
+        </import>
+        <import>
+            <uri>urn:sloot</uri>
+        </import>
+        <super/>
+    </mapping>
+</module>

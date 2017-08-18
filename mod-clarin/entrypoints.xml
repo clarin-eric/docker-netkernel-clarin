@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entrypoints>
+  <entrypoint>
+    <name>icon</name>
+    <uri>ffcpl:/mod_clarin/icon.png</uri>
+    <indexable>
+      <title>CLARIN NK module icon</title>
+      <desc/>
+      <keywords/>
+    </indexable>
+    <categories>img hidden</categories>
+    <group>entrypoints</group>
+    <icon/>
+  </entrypoint>
+  <entrypoint>
+      <name>mod_clarin_doc</name>
+      <uri>ffcpl:/mod_clarin/doc/</uri>
+      <indexable>
+          <title>CLARIN documentation</title>
+          <desc>CLARIN</desc>
+          <keywords/>
+      </indexable>
+      <fullTextIndex/>
+      <categories>doc</categories>
+      <group>CLARIN</group>
+      <icon/>
+  </entrypoint>
+  <entrypoint>
+      <name>mod_clarin_about</name>
+      <uri>ffcpl:/mod_clarin/doc/about.html</uri>
+      <indexable>
+          <title>CLARIN about accessor</title>
+          <desc>Give general information about the CLARIN module</desc>
+          <keywords/>
+      </indexable>
+      <fullTextIndex/>
+      <categories>URA</categories>
+      <group>CLARIN</group>
+      <icon/>
+  </entrypoint>
+</entrypoints>

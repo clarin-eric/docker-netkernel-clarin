@@ -1,0 +1,304 @@
+﻿<html xmlns:xi="http://www.w3.org/2001/XInclude">
+	<head>
+		<title>CLARIN Web Services: core CMD model for Web Service descriptions</title>
+		<link rel="shortcut icon" href="https://www.clarin.eu/sites/all/themes/CLARIN_Horizon/favicon.ico" />
+		<link rel="icon" href="https://www.clarin.eu/sites/all/themes/CLARIN_Horizon/favicon.ico" />
+		<link href="$site$clarin/ws/cmd-core/style/style.css" rel="stylesheet" type="text/css" />
+		<link href="$site$clarin/ws/cmd-core/xmlverbatim/xmlverbatim.css" rel="stylesheet" type="text/css" />
+		<script type="text/javascript" src="$site$clarin/ws/cmd-core/jquery/jquery-1.6.4.min.js">
+			<!--
+                keep the script alive in IE//-->
+		</script>
+		<link href="$site$clarin/ws/cmd-core/jquery/plugins/treeTable-2.3.0/src/stylesheets/jquery.treeTable.css" rel="stylesheet" type="text/css" />
+		<script type="text/javascript" src="$site$clarin/ws/cmd-core/jquery/plugins/treeTable-2.3.0/src/javascripts/jquery.treeTable.min.js">
+			<!--
+                keep the script alive in IE//-->
+		</script>
+		<script type="text/javascript">
+			\$(document).ready(function()  {
+  				\$("#core-profile").treeTable();
+			});
+		</script>
+	</head>
+	<body>
+		<table class="main">
+			<tr>
+				<td class="left">
+					<a href="http://www.clarin.eu/"><img src="$site$clarin/ws/cmd-core/imgs/Logo-trans-compact-CLARIN.png" width="125px" border="0" /></a>
+					<div class="note" style="text-align:center;font-style:italic;">Web Services</div>
+				</td>
+				<td class="right">
+					<div class="title">Core CMD model for Web Service descriptions</div>
+				</td>
+			</tr>
+			<tr>
+				<td class="left">
+					<ol class="menu">
+						<li>
+							<a href="#intro">introduction</a>
+						</li>
+						<li>
+							<a href="#model">model</a>
+						</li>
+						<li>
+							<a href="#profile">profile</a>
+						</li>
+						<li>
+							<a href="#usage">usage</a>
+						</li>
+						<li>
+							<a href="#validation">validation</a>
+						</li>
+						<li>
+							<a href="#example">example</a>
+						</li>
+						<li>
+							<a href="#faq">FAQ</a>
+						</li>
+						<li>
+							<a href="#pubs">publications</a>
+						</li>
+						<li>
+							<a href="#contact">contact</a>
+						</li>
+						<li>
+							<a href="#ack">acknowledgements</a>
+						</li>
+						<li>
+							<a href="#log">change log</a>
+						</li>
+					</ol>
+				</td>
+				<td valign="top" style="padding:10;">
+					<a name="intro"></a>
+					<div class="subtitle">Introduction</div>
+					<p> Within the CLARIN infrastructure a growing number of web services is becoming available. To answer linguistic research questions advanced workflows of these services will be created. Various national CLARIN initiatives are using or building workflow engines to specify and execute these workflows. In general these workflow engines execute web services based on metadata stored in an engine specific repository. This core CMD model for CLARIN web service descriptions is based on the overlap between the metadata schemes of these repositories. </p>
+					<fieldset style="border: 1px dashed red;margin-bottom:1em;">
+						<legend style="font-weight:bold;">Preview</legend>
+						<p> This is not yet the final version of this page. The following actions still need to be done: </p>
+						<ul>
+							<li>in ISOcat: <ol>
+									<li>complete the new data category specifications and make them public</li>
+								</ol>
+							</li>
+						</ul>
+					</fieldset>
+					<a name="model"></a>
+					<div class="subtitle">UML model</div>
+					<p>
+						<img src="model/WS-Core-Components.png" style="padding:1em;" />
+						<br />
+						<span> ( View the UML model as <a href="model/WS-Core-Components.svg">SVG</a>, <a href="model/WS-Core-Components.emf">EMF</a>, <a href="model/WS-Core-Components.jpg">JPEG</a>, <a href="model/WS-Core-Components.png">PNG</a> or <a href="model/WS-Core-Components.pdf">PDF</a> ) </span>
+					</p>
+					<a name="profile"></a>
+					<div class="subtitle">CMD profile</div>
+					<p> Based on this UML model a CMD profile has been created. However, notice as CMD doesn't support object oriented features like abstract classes and inheritance this profile isn't a one-to-one transformation. </p>
+					<xi:include href="profile.xml"></xi:include>
+					<p> ( View the CMD profile in the <a href="$registry$?item=$profile$&amp;space=$space$" target="other">registry</a> or download the profile as <a href="$registry$/rest/registry/profiles/$profile$/xml">XML</a> or <a href="$registry$/rest/registry/profiles/$profile$/xsd">XSD</a> ) </p>
+					<p>Notes:</p>
+					<ol>
+						<li>In an instance of the UML model Parameter and ParameterGroup instances would me able to mix in the Input, Output and Parameters lists, but in the CMD model ParameterGroup instances have to precede Parameter instances</li>
+						<li>In the CMD model ServiceDescriptionLocation is a component instead of an element to enable the use of a CMD ResourceProxy to point to the WSDL or WADL file <fieldset style="border: 1px dashed #02027C;margin:1em;">
+								<legend>Example use of CMD ResourceProxy</legend>
+								<div class="xmlverb-default" style="margin:1em;"> &lt;<span class="xmlverb-element-name">CMD</span><span class="xmlverb-ns-name"> xmlns</span>="<span class="xmlverb-ns-uri">http://www.clarin.eu/cmd/</span>" ... <span class="xmlverb-attr-name">CMDVersion</span>="<span class="xmlverb-attr-content">1.1</span>"&gt;<span class="xmlverb-text"><br /> &#160;&#160;&#160;&#160;</span>&lt;<span class="xmlverb-element-name">Header</span> /&gt;<span class="xmlverb-text"><br /> &#160;&#160;&#160;&#160;</span>&lt;<span class="xmlverb-element-name">Resources</span>&gt;<span class="xmlverb-text"><br /> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</span>&lt;<span class="xmlverb-element-name">ResourceProxyList</span>&gt;<span class="xmlverb-text"><br /> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</span>&lt;<span class="xmlverb-element-name">ResourceProxy</span>
+									<span class="xmlverb-attr-name">id</span>="<span class="xmlverb-attr-content">r1</span>"&gt;<span class="xmlverb-text"><br /> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</span>&lt;!--<span class="xmlverb-comment">the WSDL MIME type is application/wsdl+xml</span>--&gt;<span class="xmlverb-text"><br /> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</span>&lt;<span class="xmlverb-element-name">ResourceType</span>
+									<span class="xmlverb-attr-name">mimetype</span>="<span class="xmlverb-attr-content">application/vnd.sun.wadl+xml</span>"&gt;<span class="xmlverb-text">Resource</span>&lt;/<span class="xmlverb-element-name">ResourceType</span>&gt;<span class="xmlverb-text"><br /> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</span>&lt;<span class="xmlverb-element-name">ResourceRef</span>&gt;<span class="xmlverb-text">uri:myServiceDescription</span>&lt;/<span class="xmlverb-element-name">ResourceRef</span>&gt;<span class="xmlverb-text"><br /> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</span>&lt;/<span class="xmlverb-element-name">ResourceProxy</span>&gt;<span class="xmlverb-text"><br /> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</span>&lt;/<span class="xmlverb-element-name">ResourceProxyList</span>&gt;<span class="xmlverb-text"><br />
+										&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</span>&lt;<span class="xmlverb-element-name">JournalFileProxyList</span> /&gt;<span class="xmlverb-text"><br /> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</span>&lt;<span class="xmlverb-element-name">ResourceRelationList</span> /&gt;<span class="xmlverb-text"><br /> &#160;&#160;&#160;&#160;</span>&lt;/<span class="xmlverb-element-name">Resources</span>&gt;<span class="xmlverb-text"><br /> &#160;&#160;&#160;&#160;</span>&lt;<span class="xmlverb-element-name">Components</span>&gt;<span class="xmlverb-text"><br /> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</span>&lt;<span class="xmlverb-element-name">myProfile</span>&gt;<span class="xmlverb-text"><br /> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</span>&lt;<span class="xmlverb-element-name">Service</span>
+									<span class="xmlverb-attr-name">CoreVersion</span>="<span class="xmlverb-attr-content">1.0</span>"&gt;<span class="xmlverb-text"><br /> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</span>&lt;<span class="xmlverb-element-name">Name</span>&gt;<span class="xmlverb-text">myService</span>&lt;/<span class="xmlverb-element-name">Name</span>&gt;<span class="xmlverb-text"><br /> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</span>&lt;<span class="xmlverb-element-name">ServiceDescriptionLocation</span>
+									<span class="xmlverb-attr-name">ref</span>="<span class="xmlverb-attr-content">r1</span>" /&gt;<span class="xmlverb-text"><br /> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</span>&lt;<span class="xmlverb-element-name">Operations</span>&gt;<span class="xmlverb-text"><br /> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;...<br /> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</span>&lt;/<span class="xmlverb-element-name">Operations</span>&gt;<span class="xmlverb-text"><br /> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</span>&lt;/<span class="xmlverb-element-name">Service</span>&gt;<span class="xmlverb-text"><br /> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</span>&lt;/<span class="xmlverb-element-name">myProfile</span>&gt;<span
+										class="xmlverb-text"><br /> &#160;&#160;&#160;&#160;</span>&lt;/<span class="xmlverb-element-name">Components</span>&gt;<span class="xmlverb-text"><br />
+									</span>&lt;/<span class="xmlverb-element-name">CMD</span>&gt;<br />
+								</div>
+							</fieldset>
+						</li>
+					</ol>
+					<a name="usage"></a>
+					<div class="subtitle">Usage</div>
+					<p> A web service repository shouldn't directly offer its services in instances of the core model. Instead a repository specific profile should be created. This repository specific profile can extend the core model, e.g., it can add additional CMD elements and components. This can be done by editing copies of the components of the core model. The current versions of the core components are in the <i>$group$</i> group in the $space$ space in the <a href="$registry$">ComponentRegistry</a>. </p>
+					<p> The following public CMD profiles are valid extensions to the core model and are or will be used by CLARIN web service registries, workflow and/or chaining engines: <dl>
+						<dt><a href="$registry$?item=clarin.eu:cr1:p_1311927752306">ToolService</a> - CLARIN-NL Tool/Service descr - version 1.0</dt>
+							<dd>CMD profile in use within CLARIN-NL/VL and to be used within the TTNWW project.</dd>
+						<dt><a href="$registry$item=clarin.eu:cr1:p_1360230992146">ToolService</a> - CLARIN-NL Tool/Service descr - DANS - version 1.0</dt>
+							<dd><a href="http://dans.knaw.nl/">DANS</a> version of the CLARIN-NL/VL <a href="$registry$?item=clarin.eu:cr1:p_1311927752306">ToolService</a> profile, which allows an optional instance of the <a href="$registry$?item=clarin.eu:cr1:c_1353678848731">DANS-DC-metadata</a> component.</dd>
+						<dt><a href="$registry$?item=clarin.eu:cr1:p_1320657629644">WebLichtWebService</a> - NaLiDa</dt>
+						<dd>From version 2.0 on CLARIN-D's <a href="http://weblicht.sfs.uni-tuebingen.de/weblichtwiki/index.php/Main_Page">WebLicht</a> supports the CMD core model for CLARIN Web Services. A dedicated <a href="http://weblicht.sfs.uni-tuebingen.de/weblichtwiki/index.php/Editing_Webservice_CMDI_Metadata">online editor</a> has been created and is available to CLARIN-D developers (look in the archive or ask on the CLARIN-D developers mailinglist if you don't know the credentials).</dd>
+						</dl>
+					</p>
+					<a name="validation"></a>
+					<p>Notes:</p>
+					<ol>
+						<li>Notice that the profile name can be different from the core profile, e.g., <i>ToolService</i>, as the associated element name will be skipped during <a href="#validation">validation</a>.</li>
+					</ol>
+					<div class="subtitle">Validation</div>
+					<p>
+						<p> When an instance of the repository specific profile is stripped of all the extensions it should still be a valid instance of the core model. This validation can be done by uploading the instance using the form below. </p>
+						<form action="$site$clarin/ws/cmd-core/validate" method="post" enctype="multipart/form-data" target="clarin-ws-cmd-core-validate">
+							<fieldset>
+								<legend>Validate a CMD instance</legend>
+								<p>
+									<label for="instance">Instance:&#160;</label>
+									<input id="instance" name="doc" type="file" size="40" />
+								</p>
+								<p>
+									<input type="submit" value="Validate" />
+								</p>
+							</fieldset>
+						</form>
+					</p>
+					<a name="example"></a>
+					<div class="subtitle">Example</div>
+					<p> This example shows how the CLARIN-NL repository specific <a href="http://catalog.clarin.eu/ds/ComponentRegistry?item=clarin.eu:cr1:p_1311927752306">ToolService</a> profile has been created. This profile mainly adds the <a href="http://catalog.clarin.eu/ds/ComponentRegistry?item=clarin.eu:cr1:c_1311927752300">TechnicalMetadata</a> component to the <a href="http://catalog.clarin.eu/ds/ComponentRegistry?item=clarin.eu:cr1:c_1299509410079">Parameter</a> component of the core model.</p>
+					<ol>
+						<li>Add the TechnicalMetadata component to the core Parameter component: <ol>
+								<li>Open the <a href="http://catalog.clarin.eu/ds/ComponentRegistry?item=clarin.eu:cr1:c_1299509410079">core Parameter</a> component in the editor</li>
+								<li>Change the group name of the component, so you can find the edited component back <ul>
+										<li>Do <b>not</b> change the component name, as that will change the element names and make the instances invalid!</li>
+									</ul>
+								</li>
+								<li>Add the <a href="http://catalog.clarin.eu/ds/ComponentRegistry?item=clarin.eu:cr1:c_1311927752300">TechnicalMetadata</a> component</li>
+								<li>Save the <a href="http://catalog.clarin.eu/ds/ComponentRegistry?item=clarin.eu:cr1:c_1320657629628">edited Parameter</a> component in your own workspace (see </li>
+							</ol>
+						</li>
+						<li>Recusively update each component that refers to an updated component: <ol>
+								<li>Update the ParameterGroup component: <ol>
+										<li>Open the <a href="http://catalog.clarin.eu/ds/ComponentRegistry?item=clarin.eu:cr1:c_1302702320471">core ParameterGroup</a> component in the editor</li>
+										<li>Change the group name of the component, so you can find the edited component back <ul>
+												<li>Do <b>not</b> change the component name, as that will change the element names and make the instanced invalid!</li>
+											</ul>
+										</li>
+										<li>Replace the Parameter component by the <a href="http://catalog.clarin.eu/ds/ComponentRegistry?item=clarin.eu:cr1:c_1320657629628">edited Parameter</a> component from your own workspace <ul>
+												<li>Recreate the cardinality constraints so they stay <b>valid</b> in the core model, i.e., you can have a lower maximum cardinality but not a lower minimum cardinality!</li>
+											</ul>
+										</li>
+										<li>Save the <a href="http://catalog.clarin.eu/ds/ComponentRegistry?item=clarin.eu:cr1:c_1320657629629">edited ParameterGroup</a> component in your own workspace</li>
+									</ol>
+								</li>
+								<li>Update the Operation component: <ol>
+										<li>Open the <a href="http://catalog.clarin.eu/ds/ComponentRegistry?item=clarin.eu:cr1:c_1299509410080">core Operation</a> component in the editor</li>
+										<li>Change the group name of the component, so you can find the edited component back <ul>
+												<li>Do <b>not</b> change the component name, as that will change the element names and make the instanced invalid!</li>
+											</ul>
+										</li>
+										<li>Replace the Parameter and ParameterGroup components by the <a href="http://catalog.clarin.eu/ds/ComponentRegistry?item=clarin.eu:cr1:c_1320657629628">edited Parameter</a> and <a href="http://catalog.clarin.eu/ds/ComponentRegistry?item=clarin.eu:cr1:c_1320657629629">ParameterGroup</a> components from your own workspace <ul>
+												<li>Recreate the cardinality constraints so they stay <b>valid</b> in the core model, i.e., you can have a lower maximum cardinality but not a lower minimum cardinality!</li>
+											</ul>
+										</li>
+										<li>Save the <a href="http://catalog.clarin.eu/ds/ComponentRegistry?item=clarin.eu:cr1:c_1320657629630">edited Operation</a> component in your own workspace</li>
+									</ol>
+								</li>
+								<li>Update the Service component: <ol>
+										<li>Open the <a href="http://catalog.clarin.eu/ds/ComponentRegistry?item=clarin.eu:cr1:c_1299509410081">core Service</a> component in the editor</li>
+										<li>Change the group name of the component, so you can find the edited component back <ul>
+												<li>Do <b>not</b> change the component name, as that will change the element names and make the instanced invalid!</li>
+											</ul>
+										</li>
+										<li>Replace the Operation component by the <a href="http://catalog.clarin.eu/ds/ComponentRegistry?item=clarin.eu:cr1:c_1320657629630">edited Operation</a> components from your own workspace <ul>
+												<li>Recreate the cardinality constraints so they stay <b>valid</b> in the core model, i.e., you can have a lower maximum cardinality but not a lower minimum cardinality!</li>
+											</ul>
+										</li>
+										<li>Save the <a href="http://catalog.clarin.eu/ds/ComponentRegistry?item=clarin.eu:cr1:c_1320657629631">edited Service</a> component in your own workspace</li>
+									</ol>
+								</li>
+							</ol>
+						</li>
+						<li>Create <a href="http://catalog.clarin.eu/ds/ComponentRegistry?item=clarin.eu:cr1:p_1311927752306">your own profile</a> which uses the <a href="http://catalog.clarin.eu/ds/ComponentRegistry?item=clarin.eu:cr1:c_1320657629631">Service</a> component from your own workspace</li>
+						<li>Check if an instance of your profile is also a valid instance of the core model: <ol>
+								<li>Create a valid instance based on the schema of your own profile</li>
+								<li>Validate the instance also against the core model using <a href="#validation">the form above</a></li>
+							</ol>
+						</li>
+					</ol>
+					<p>The results of the CLARIN-NL <a href="http://adelheid.ruhosting.nl/">Adelheid</a> project has been described using this ToolService profile and is thus also a valid instantiation of the core model:</p>
+					<ol>
+						<li>CMDI metadata file: <a href="http://catalog.clarin.eu/metadata/cmdi/services/Adelheid.cmdi">http://catalog.clarin.eu/metadata/cmdi/services/Adelheid.cmdi</a></li>
+						<li>referenced WADL files: <ol>
+							<li>adelheid/main: <a href="http://catalog.clarin.eu/adelheidws/wadl/main.wadl">http://catalog.clarin.eu/adelheidws/wadl/main.wadl</a></li>
+							<li>adelheid/lexicon: <a href="http://catalog.clarin.eu/adelheidws/wadl/lexicon.wadl">http://catalog.clarin.eu/adelheidws/wadl/lexicon.wadl</a></li>
+							<li>adelheid/tokenizer: <a href="http://catalog.clarin.eu/adelheidws/wadl/tokenizer.wadl">http://catalog.clarin.eu/adelheidws/wadl/tokenizer.wadl</a></li>
+							</ol>
+						</li>
+					</ol>
+					<p>Notes:</p>
+					<ol>
+						<li>The links in the example above are based on version 1.0.1 of the core model and version 1.0.0 of the ToolService profile.</li>
+					</ol>
+					<a name="faq"></a>
+					<div class="subtitle">Frequently Asked Questions</div>
+					<p>
+						<dl>
+							<dt><i>Why do we need a technical service description, e.g., a WADL or WSDL file, next to the CMD metadata to fully document a web service?</i></dt>
+							<dd>
+								<p>The CMD metadata for web services focusses on the semantic description of a service, i.e., what goes in and what comes out, but it doesn't specifiy how to technically invoke the web service. Should you, for example, pass on the parameters into the query string and use the GET HTTP verb to invoke the service and receive the result? Or should one do a multi-part POST? Or should one wrap the input in a SOAP envelope and POST it to the web service? One could extend the core model to make this explicit, but there are already many of these proposals, e.g., WSDL and WADL, which can be reused. To invoke aribtrary web services a workflow or chaining engine needs to know this. For a more in-depth discussion see the <a href="#metadata2012">Metadata2012 paper</a> on the core model.</p>
+							</dd>
+							<dt><i>The core model doesn't prescribe a technical service description language or Interface Definition Language (IDL), why not?</i></dt>
+							<dd>
+								<p>For SOAP web services there is a standard, i.e., WSDL (2), but for REST-based web services there isn't. Sun submitted WADL some years ago, but it never made it to a recommendation. So currently there are several competing proposals:
+									<ul>
+										<li><a href="http://www.w3.org/TR/wsdl20/">WSDL 2</a> also supports <a href="http://www.w3.org/TR/wsdl20-primer/#more-bindings-http">HTTP bindings</a></li>
+										<li><a href="http://www.w3.org/Submission/wadl/">WADL</a> (W3C submission)</li>
+										<li><a href="http://tools.ietf.org/html/draft-nottingham-json-home-00">Home Documents for HTTP APIs</a> (IETF draft)</li>
+										<li><a href="http://restdesc.org/">RESTdesc</a></li>
+										<li><a href="http://www.balisage.net/Proceedings/vol10/html/Robie01/BalisageVol10-Robie01.html">RESTful Service Description Language (RSDL)</a></li>
+										<li>... (please <a href="#contact">contact</a> me to add other alternatives)</li>
+									</ul>
+								</p>
+							</dd>
+						</dl>
+					</p>
+					<a name="pubs"></a>
+					<div class="subtitle">Publications</div>
+					<p>
+						<ol>
+							<li><a name="metadata2012"></a>M. Windhouwer, D. Broeder, D. van Uytvanck. <a href="http://www.lrec-conf.org/proceedings/lrec2012/workshops/11.LREC2012%20Metadata%20Proceedings.pdf#page=48&amp;pagemode=none">A CMD Core Model for CLARIN Web Services</a>.
+								In the <i>Proceedings of the <a href="http://workshops.elda.org/metadata2012/">Metadata2012 Workshop</a> on
+								Describing Language Resources with Metadata: Towards Flexibility and Interoperability in the Documentation of Language Resources</i>.
+								At <a href="http://www.lrec-conf.org/lrec2012/">LREC 2012</a>, Istanbul, Turkey, May 22, 2012.
+								(<a href="http://www.slideshare.net/mwindhouwer/a-cmd-core-model-for-clarin-web-services">SlideShare</a>)
+							</li>
+						</ol>
+					</p>
+					<a name="contact"></a>
+					<div class="subtitle">Contact</div>
+					<p>For any additional information feel free to contact:</p>
+					<p>
+						<img src="$site$clarin/ws/cmd-core/imgs/email.png" align="baseline" />&#160;<a href="mailto:Menzo.Windhouwer@meertens.knaw.nl">Menzo Windhouwer</a> (CLARIN ERIC/Meertens Institute) </p>
+					<a name="ack"></a>
+					<div class="subtitle">Acknowledgements</div>
+					<p>This core CMD model is based on information provided by and feedback from:</p>
+					<ul>
+						<li>Marc Kemps-Snijders (Meertens Institute)</li>
+						<li>Marta Villegas (Universitat Pompeu Fabra)</li>
+						<li>Thomas Zastrow (University of Tübingen)</li>
+					</ul>
+					<a name="log"></a>
+					<div class="subtitle">Change log</div>
+					<p>[2017-08-17] this page</p>
+					<ol>
+						<li>Updated various links</li>
+						<li>Prepare move from MPI to CLARIN</li>
+					</ol>
+					<p>[2011-12-19] <a href="$registry$?item=$profile$&amp;space=$space$">CLARIN core WS descr - version 1.0.1</a></p>
+					<ol>
+						<li>Inplace update of the component to allow multilingual descriptions</li>
+					</ol>
+					<p>[2011-11-16] CLARIN core WS descr - version 1.0</p>
+					<ol>
+						<li>The CoreVersion attribute on the Service component now indicates the version (currently 1.0) of the core model that is instantiated</li>
+						<li>Location attribute has been renamed to ServiceDescriptionLocation to indicate that it should point to a WSDL or WADL description of the service(s)</li>
+						<li>ServiceDescriptionLocation is realised as a CMD component to enable the use of a CMD resource proxy for the URI of the WSDL or WADL document</li>
+						<li>Recipe attribute has been removed as the ServiceDescriptionLocation now points to a machine readable recipe, i.e., a WSDL or WADL file, to invoke a service</li>
+						<li>Name attribute of the AbstractParameter class should point to a parameter described in the WSDL or WADL file if the Parameter(Group) has a direct correspondent</li>
+						<li>Name attribute of the Operation class should point to a service described in the WSDL or WADL file</li>
+						<li>SemanticType attribute has been added to the AsbtractParameter class to fine tune output/input parameter matching</li>
+						<li>DataCategory attribute has moved to the AbstractParameter class to allow references to container data categories from ParameterGroup</li>
+					</ol>
+					<p>[2011-08-08] <a href="http://catalog.clarin.eu/ds/ComponentRegistry?item=clarin.eu:cr1:p_1311927752332">CLARIN core WS descr (tentative)</a>
+					</p>
+					<ol>
+						<li>Tentative release of the profile and components</li>
+					</ol>
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>

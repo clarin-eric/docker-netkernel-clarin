@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<nvp>
+    <registry>http://catalog.clarin.eu/ds/ComponentRegistry</registry>
+    <mapping>https://raw.githubusercontent.com/clarin-eric/VLO-mapping/master/mapping/facetConcepts.xml</mapping>
+    <site>http://localhost:8080/</site>
+</nvp>

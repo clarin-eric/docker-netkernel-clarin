@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<accessor debug="false">
+    <name>/clarin/ws/cmd-core/validate</name>
+    <descr>Validate a CMDI instance against the core profile.</descr>
+    <param mandatory="true">
+        <name>doc</name>
+        <descr>the instance doc to validate</descr>
+        <source>
+            <param/>
+        </source>
+    </param>
+    <params/>
+    <idoc>
+        <!-- load profile -->
+        <instr>
+            <type>sloot.xquery</type>
+            <operator>
+                <uri>{string(doc('etc/config.xml')/nvp/registry)}/rest/registry/profiles/{string(doc('etc/config.xml')/nvp/profile)}/xml</uri>
+            </operator>
+            <target>var:prof</target>
+        </instr>
+        <!-- -X->
+        <instr>
+            <type>copy</type>
+            <operand>
+                <uri>file:///D:/user/menwin/projects/CLARIN/WS/documents/CLARINWebService.xml</uri>
+            </operand>
+            <target>var:prof</target>
+        </instr>
+        <!-X- -->
+        <accessor-debug>
+            <instr>
+                <type>log</type>
+                <operand>var:prof</operand>
+            </instr>
+        </accessor-debug>
+        <!-- strip doc to core -->
+        <instr>
+            <type>xslt2</type>
+            <operand>var:doc</operand>
+            <operator>stripToCore.xsl</operator>
+            <core>curi:var:prof</core>
+            <target>var:core</target>
+        </instr>
+        <accessor-debug>
+            <instr>
+                <type>copy</type>
+                <operand>var:core</operand>
+                <target>ffcpl:/trace/clarin-ws-cmd-core.validate.core.xml</target>
+            </instr>
+        </accessor-debug>
+        <instr>
+            <type>sloot.xquery</type>
+            <operator>
+                <uri>{string(doc('etc/config.xml')/nvp/registry)}/rest/registry/profiles/{string(doc('etc/config.xml')/nvp/profile)}/xsd</uri>
+            </operator>
+            <target>var:schema</target>
+        </instr>
+        <!-- -X->
+        <instr>
+            <type>copy</type>
+            <operand>
+                <uri>file:///D:/user/menwin/projects/CLARIN/WS/documents/CLARINWebService.xsd</uri>
+            </operand>
+            <target>var:schema</target>
+        </instr>
+        <!-X- -->
+        <accessor-debug>
+            <instr>
+                <type>log</type>
+                <operand>var:schema</operand>
+            </instr>
+        </accessor-debug>
+        <instr>
+            <type>validateXSD</type>
+            <operand>var:core</operand>
+            <operator>var:schema</operator>
+            <target>var:report</target>
+        </instr>
+        <instr>
+            <type>xslt2</type>
+            <operand>var:core</operand>
+            <operator>xmlverbatim/xmlverbatimwrapper.xsl</operator>
+            <target>var:xmlhtml</target>
+        </instr>
+        <accessor-debug>
+            <instr>
+                <type>log</type>
+                <operand>var:xmlhtml</operand>
+            </instr>
+        </accessor-debug>
+        <instr>
+            <type>xslt2</type>
+            <operand>var:report</operand>
+            <operator>
+                <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
+                    <xsl:param name="xmlhtml"/>
+                    <xsl:template match="text()"/>
+                    <xsl:template match="/b">
+                        <html>
+                            <head>
+                                <link href="$site$clarin/ws/cmd-core/style/style.css" rel="stylesheet" type="text/css"/>
+                                <link href="$site$clarin/ws/cmd-core/xmlverbatim/xmlverbatim.css" rel="stylesheet" type="text/css"/>
+                                <title>CLARIN Web Services: core CMD model for Web Service
+                                    descriptions - validation result</title>
+                            </head>
+                            <body>
+                                <div class="subtitle">Validation result</div>
+                                <p>
+                                    <xsl:text>The XML document is </xsl:text>
+                                    <xsl:choose>
+                                        <xsl:when test="text()='t'">
+                                            <xsl:text>a </xsl:text>
+                                            <b>valid</b>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:text>an </xsl:text>
+                                            <b>invalid</b>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                    <xsl:text> instance of the CMD core model for CLARIN Web Service descriptions.</xsl:text>
+                                </p>
+                                <xsl:if test="errors|warnings">
+                                    <table class="table report">
+                                        <thead>
+                                            <tr>
+                                                <th>type</th>
+                                                <th style="text-align:left;">message</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <xsl:apply-templates/>
+                                        </tbody>
+                                    </table>
+                                </xsl:if>
+                                <div class="subtitle">Core instance document generated from the uploaded document</div>
+                                <p style="xmlverb-default">
+                                    <xsl:copy-of select="$xmlhtml//body/*"/>
+                                </p>
+                            </body>
+                        </html>
+                    </xsl:template>
+                    <xsl:template match="error|warning">
+                        <tr>
+                            <td class="{local-name()}">
+                                <xsl:value-of select="local-name()"/>
+                            </td>
+                            <td>
+                                <xsl:value-of select="."/>
+                            </td>
+                        </tr>
+                    </xsl:template>
+                </xsl:stylesheet>
+            </operator>
+            <xmlhtml>var:xmlhtml</xmlhtml>
+            <target>var:result</target>
+        </instr>
+        <instr>
+            <type>sloot.xquery</type>
+            <operator>
+                <nvp>
+                    {doc('etc/config.xml')/nvp/*}
+                </nvp>
+            </operator>
+            <target>var:config</target>
+        </instr>
+        <instr>
+            <type>sloot.render</type>
+            <template>var:result</template>
+            <attributes>var:config</attributes>
+            <target>this:response</target>
+        </instr>
+        <exception>
+            <instr>
+                <type>copy</type>
+                <operand>this:exception</operand>
+                <target>ffcpl:/trace/clarin-ws-cmd-core.validate.exception.xml</target>
+            </instr>
+            <instr>
+                <type>xslt2</type>
+                <operand>this:exception</operand>
+                <operator>
+                    <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
+                        <xsl:template match="/">
+                            <fieldset style="border: red dotted 1px;padding:1em;">
+                                <legend style="font-weight:bold;">An unexpected error occured while validating an instance of the CMD core model for CLARIN Web Service descriptions!</legend>
+                                <p>The following error occurred:</p>
+                                <p>&#160;</p>
+                                <quote style="border: gray dotted 1px;margin:1em;padding:1em;background-color:lightgray;">
+                                    <xsl:value-of select="(.//message)[last()]"/>
+                                </quote>
+                                <p>&#160;</p>
+                                <p>If this indicates a problem om the server side please contact:
+                                    <a href="mailto:Menzo.Windhouwer@mpi.nl">Menzo Windhouwer</a>.</p></fieldset>
+                        </xsl:template>
+                    </xsl:stylesheet>
+                </operator>
+                <target>this:response</target>
+            </instr>
+        </exception>
+    </idoc>
+    <exception>
+        <debug/>
+        <trace>ffcpl:/trace/clarin-ws-cmd-core.validate.fatal-exception.xml</trace>
+        <throw/>
+    </exception>
+    <response>
+        <debug>ffcpl:/trace/clarin-ws-cmd-core.validate.response.xml</debug>
+        <mime>text/html</mime>
+    </response>
+</accessor>
